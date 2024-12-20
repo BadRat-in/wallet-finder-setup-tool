@@ -82,5 +82,9 @@ else
     print_success "wallet-finder alias already exists in .zshrc"
 fi
 
+# Step 9: Load .zshrc
+print_step "Loading .zshrc..."
+source "$ZSHRC" || print_error "Failed to execute .zshrc"
+
 print_success "Setup completed successfully!"
 echo "\033[0;33mPlease run 'source ~/.zshrc' to load the new alias\033[0m"
