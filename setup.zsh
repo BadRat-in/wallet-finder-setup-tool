@@ -19,6 +19,9 @@ print_step "Checking for Homebrew installation..."
 if ! command -v brew &> /dev/null; then
     print_step "Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || print_error "Failed to install Homebrew"
+
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zprofile"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 else
     print_success "Homebrew is already installed"
 fi
