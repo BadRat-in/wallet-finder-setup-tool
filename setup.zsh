@@ -35,44 +35,38 @@ else
     print_success "Python 3.10 is already installed"
 fi
 
-# Step 3: Install python-tk for Python 3.10
-print_step "Installing python-tk..."
-brew install python-tk@3.10 || print_error "Failed to install python-tk"
-
-# Step 4: Create wallet-finder directory
+# Step 3: Create wallet-finder directory
 WALLET_FINDER_DIR="$HOME/Documents/wallet-finder"
 print_step "Creating wallet-finder directory..."
 mkdir -p "$WALLET_FINDER_DIR" || print_error "Failed to create wallet-finder directory"
 print_success "Created directory: $WALLET_FINDER_DIR"
 
-# Step 5: Create virtual environment
+# Step 4: Create virtual environment
 print_step "Creating virtual environment..."
 cd "$WALLET_FINDER_DIR" || print_error "Failed to change directory"
 python3.10 -m venv .venv || print_error "Failed to create virtual environment"
 print_success "Created virtual environment"
 
-# Step 6: Install crypto-wallet-finder package
+# Step 5: Install crypto-wallet-finder package
 print_step "Installing crypto-wallet-finder package..."
 source .venv/bin/activate || print_error "Failed to activate virtual environment"
 pip install crypto-wallet-finder --no-cache-dir || print_error "Failed to install crypto-wallet-finder package"
 
-# Step 7: Create main.py
+# Step 6: Create main.py
 print_step "Creating main.py..."
 cat > "$WALLET_FINDER_DIR/main.py" << 'EOL'
-from wallet_finder import WalletFinderGUI
-import tkinter as tk
+from wallet_finder import Core
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = WalletFinderGUI(root)
     print("Starting WalletFinderGUI...")
-    root.mainloop()
+    Core().main()
+
 EOL
 
-# Step 8: Update .zshrc
+# Step 7: Update .zshrc
 print_step "Updating .zshrc..."
 ZSHRC="$HOME/.zshrc"
-ALIAS_LINE='\nalias wallet-finder="cd $HOME/Documents/wallet-finder && source .venv/bin/activate && python $HOME/Documents/wallet-finder/main.py"'
+ALIAS_LINE='\nalias wallet-finder="cd $WALLET_FINDER_DIR && source .venv/bin/activate && python $WALLET_FINDER_DIR/main.py; exit"'
 
 # Check if alias already exists
 if ! grep -q "alias wallet-finder=" "$ZSHRC" 2>/dev/null; then
@@ -82,7 +76,7 @@ else
     print_success "wallet-finder alias already exists in .zshrc"
 fi
 
-# Step 9: Load .zshrc
+# Step 8: Load .zshrc
 print_step "Loading .zshrc..."
 source "$ZSHRC" || print_error "Failed to execute .zshrc"
 
